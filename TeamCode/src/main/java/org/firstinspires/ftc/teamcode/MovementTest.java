@@ -36,20 +36,38 @@ public class MovementTest extends LinearOpMode
                 FR.setPower(gamepad2.right_stick_y);
                 BL.setPower(gamepad2.right_stick_y);
                 BR.setPower(gamepad2.right_stick_y);
-            } else {
+            }else {
                 if (gamepad2.right_stick_x < 0) {
                     FL.setPower(-1.0);
                     FR.setPower(1.0);
-                    BL.setPower(1.0);
-                    BR.setPower(-1.0);
+                    BL.setPower(4.0/6.0);
+                    BR.setPower(-4.0/6.0);
                 } else {
                     FL.setPower(1.0);
                     FR.setPower(-1.0);
-                    BL.setPower(-1.0);
-                    BR.setPower(1.0);
+                    BL.setPower(-4.0/6.0);
+                    BR.setPower(4.0/6.0);
                 }
             }
+             if(gamepad2.left_stick_x>0){
+                FL.setPower(1.0);
+                FR.setPower(-1.0);
+                BL.setPower(4.0/6.0);
+                BR.setPower(-4.0/6.0);
+            }
+             if(gamepad2.left_stick_x<0){
+                FL.setPower(-1.0);
+                FR.setPower(1.0);
+                BL.setPower(-4.0/6.0);
+                BR.setPower(4.0/6.0);
+            }
 
+            if(!gamepad2.right_stick_button&&!gamepad2.left_stick_button&&gamepad2.right_stick_x == 0&&gamepad2.right_stick_y == 0){
+                FL.setPower(0);
+                FR.setPower(0);
+                BL.setPower(0);
+                BR.setPower(0);
+            }
 
         }
 
