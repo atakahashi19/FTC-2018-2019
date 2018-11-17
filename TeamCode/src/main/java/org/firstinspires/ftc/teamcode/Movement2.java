@@ -19,7 +19,10 @@ public class Movement2 extends LinearOpMode
     private DcMotor FR;
     private DcMotor BL;
     private DcMotor BR;
-
+    private DcMotor Grabber;
+    private DcMotor Arm;
+    private Servo right;
+    private Servo left;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -27,8 +30,14 @@ public class Movement2 extends LinearOpMode
         BL = hardwareMap.dcMotor.get("backLeft");
         FR = hardwareMap.dcMotor.get("frontRight");
         BR = hardwareMap.dcMotor.get("backRight");
+        Grabber = hardwareMap.dcMotor.get("Grabber");
+        Arm = hardwareMap.dcMotor.get("Arm");
+        right = hardwareMap.servo.get("right");
+        left = hardwareMap.servo.get("left");
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
+        //right.setDirection(Servo.Direction.REVERSE);
+
         waitForStart();
 
 
@@ -47,7 +56,15 @@ public class Movement2 extends LinearOpMode
            BL.setPower(LB);
            FR.setPower(RF);
            BR.setPower(RB);
-
+           Arm.setPower(gamepad2.left_stick_y);
+           Grabber.setPower(gamepad2.right_stick_y);
+           if(gamepad2.x){
+               right.setPosition(1.0);
+               left.setPosition(1.0);
+           }else{
+               right.setPosition(0);
+               left.setPosition(0);
+           }
 
         }
 
