@@ -65,8 +65,9 @@ public class MovementTest extends LinearOpMode
             if(!gamepad2.right_stick_button&&!gamepad2.left_stick_button&&gamepad2.right_stick_x == 0&&gamepad2.right_stick_y == 0){
                 FL.setPower(0);
                 FR.setPower(0);
-                BL.setPower(0);
+
                 BR.setPower(0);
+                BL.setPower(0);
             }
 
         }
