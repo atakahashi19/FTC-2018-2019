@@ -29,7 +29,6 @@ public class MovementTest extends LinearOpMode
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
-        //dd
 
         waitForStart();
         while (opModeIsActive()) {
