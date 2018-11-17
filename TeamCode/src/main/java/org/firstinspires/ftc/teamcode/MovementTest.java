@@ -30,6 +30,8 @@ public class MovementTest extends LinearOpMode
         BR.setDirection(DcMotor.Direction.REVERSE);
         waitForStart();
         //dd
+
+        waitForStart();
         while (opModeIsActive()) {
             if (gamepad2.right_stick_x == 0) {
                 FL.setPower(gamepad2.right_stick_y);
