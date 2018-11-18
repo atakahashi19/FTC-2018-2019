@@ -101,10 +101,11 @@ public class Test extends LinearOpMode {
             if (tfod != null) {
                 tfod.activate();
             }
+            Grabber.setPower(-0.4);
+            Thread.sleep(2000);
 
             while (opModeIsActive()) {
                 if (tfod != null) {
-
                     List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
                     if (updatedRecognitions != null) {
                         telemetry.addData("# Object Detected", updatedRecognitions.size());
