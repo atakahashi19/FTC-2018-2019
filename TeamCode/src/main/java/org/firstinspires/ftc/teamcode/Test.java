@@ -81,6 +81,7 @@ public class Test extends LinearOpMode {
         FR = hardwareMap.dcMotor.get("frontRight");
         BR = hardwareMap.dcMotor.get("backRight");
         Grabber = hardwareMap.dcMotor.get("Grabber");
+        Grabber.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
         initVuforia();
@@ -102,62 +103,83 @@ public class Test extends LinearOpMode {
                 tfod.activate();
             }
             Grabber.setPower(-0.4);
-            Thread.sleep(2000);
-
-            while (opModeIsActive()) {
-                if (tfod != null) {
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                    left = true;
-                                    doMove = true;
-                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                    right = true;
-                                    doMove = true;
-                                } else {
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                    center = true;
-                                    doMove = true;
-
-                                }
-                            }
-                            telemetry.addData("Gold x", goldMineralX);
-                        }
-                        telemetry.update();
-                    }
-                }
-                if(doMove){
-                    if(left){
-                       turnLeft(300);
-                       forward(1500);
-                    }else if(right){
-                        turnRight(300);
-                        forward(1500);
-                    }else if(center){
-                        forward(1500);
-                    }
-                    doMove = false;
-                }
-
-            }
+            Thread.sleep(4000);
+            Grabber.setPower(0);
+            FL.setPower(-0.4);
+            BL.setPower(-0.4);
+            FR.setPower(0.4);
+            BR.setPower(0.4);
+            Thread.sleep(900);
+            FL.setPower(0);
+            BL.setPower(0);
+            FR.setPower(0);
+            BR.setPower(0);
+            Grabber.setPower(0.4);
+            Thread.sleep(4000);
+            Grabber.setPower(0);
+            FL.setPower(0.4);
+            BL.setPower(0.4);
+            FR.setPower(-0.4);
+            BR.setPower(-0.4);
+            Thread.sleep(900);
+            FL.setPower(0);
+            BL.setPower(0);
+            FR.setPower(0);
+            BR.setPower(0);
+//            while (opModeIsActive()) {
+//                if (tfod != null) {
+//                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+//                    if (updatedRecognitions != null) {
+//                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+//                        if (updatedRecognitions.size() == 3) {
+//                            int goldMineralX = -1;
+//                            int silverMineral1X = -1;
+//                            int silverMineral2X = -1;
+//                            for (Recognition recognition : updatedRecognitions) {
+//                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+//                                    goldMineralX = (int) recognition.getLeft();
+//                                } else if (silverMineral1X == -1) {
+//                                    silverMineral1X = (int) recognition.getLeft();
+//
+//                                } else {
+//                                    silverMineral2X = (int) recognition.getLeft();
+//                                }
+//                            }
+//                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+//                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+//                                    telemetry.addData("Gold Mineral Position", "Left");
+//                                    left = true;
+//                                    doMove = true;
+//                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+//                                    telemetry.addData("Gold Mineral Position", "Right");
+//                                    right = true;
+//                                    doMove = true;
+//                                } else {
+//                                    telemetry.addData("Gold Mineral Position", "Center");
+//                                    center = true;
+//                                    doMove = true;
+//
+//                                }
+//                            }
+//                            telemetry.addData("Gold x", goldMineralX);
+//                        }
+//                        telemetry.update();
+//                    }
+//                }
+//                if(doMove){
+//                    if(left){
+//                       turnLeft(300);
+//                       forward(1500);
+//                    }else if(right){
+//                        turnRight(300);
+//                        forward(1500);
+//                    }else if(center){
+//                        forward(1500);
+//                    }
+//                    doMove = false;
+//                }
+//
+//            }
         }
 
         if (tfod != null) {
@@ -188,10 +210,10 @@ public class Test extends LinearOpMode {
     }
 
     private void forward(long time) throws InterruptedException {
-        FL.setPower(1.0);
-        BL.setPower(1.0);
-        FR.setPower(1.0);
-        BR.setPower(1.0);
+        FL.setPower(-1.0);
+        BL.setPower(-1.0);
+        FR.setPower(-1.0);
+        BR.setPower(-1.0);
         Thread.sleep(time);
     }
     private void turnRight(long time) throws InterruptedException {

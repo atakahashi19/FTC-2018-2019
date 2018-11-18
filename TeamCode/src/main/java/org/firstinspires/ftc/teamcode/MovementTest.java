@@ -10,7 +10,7 @@ import com.qualcomm.robotcore.hardware.usb.RobotArmingStateNotifier;
 
 import java.net.NoRouteToHostException;
 
-@TeleOp (name="Teleop_1", group = "Teleop")
+@TeleOp (name="Teleop_2", group = "Teleop")
 public class MovementTest extends LinearOpMode
 
 {
@@ -37,6 +37,8 @@ public class MovementTest extends LinearOpMode
         left = hardwareMap.servo.get("left");
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
+        Grabber.setDirection(DcMotor.Direction.REVERSE);
+
         waitForStart();
 
         waitForStart();
@@ -82,11 +84,11 @@ public class MovementTest extends LinearOpMode
             Arm.setPower(gamepad2.left_stick_y);
             Grabber.setPower(gamepad2.right_stick_y);
             if(gamepad2.x){
+                right.setPosition(0.4);
+                left.setPosition(0.4);
+            }else{
                 right.setPosition(1.0);
                 left.setPosition(1.0);
-            }else{
-                right.setPosition(0);
-                left.setPosition(0);
             }
 
         }

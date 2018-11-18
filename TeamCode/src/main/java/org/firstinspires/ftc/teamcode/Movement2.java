@@ -35,8 +35,9 @@ public class Movement2 extends LinearOpMode
         right = hardwareMap.servo.get("right");
         left = hardwareMap.servo.get("left");
         FR.setDirection(DcMotor.Direction.REVERSE);
+        Grabber.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
-        //right.setDirection(Servo.Direction.REVERSE);
+        left.setDirection(Servo.Direction.REVERSE);
 
         waitForStart();
 
@@ -56,14 +57,14 @@ public class Movement2 extends LinearOpMode
            BL.setPower(LB);
            FR.setPower(RF);
            BR.setPower(RB);
-           Arm.setPower(gamepad2.left_stick_y);
+           Arm.setPower(gamepad2.left_stick_y/3);
            Grabber.setPower(gamepad2.right_stick_y);
            if(gamepad2.x){
-               right.setPosition(1.0);
-               left.setPosition(1.0);
-           }else{
                right.setPosition(0);
                left.setPosition(0);
+           }else{
+               right.setPosition(1.0);
+               left.setPosition(1.0);
            }
 
         }
