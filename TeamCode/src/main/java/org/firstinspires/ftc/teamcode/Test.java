@@ -138,6 +138,7 @@ public class Test extends LinearOpMode {
 
                                 }
                             }
+                            telemetry.addData("Gold x", goldMineralX);
                         }
                         telemetry.update();
                     }
