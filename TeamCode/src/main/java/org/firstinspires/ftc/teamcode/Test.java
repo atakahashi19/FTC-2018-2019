@@ -110,10 +110,7 @@ public class Test extends LinearOpMode {
             FR.setPower(0.4);
             BR.setPower(0.4);
             Thread.sleep(900);
-            FL.setPower(0);
-            BL.setPower(0);
-            FR.setPower(0);
-            BR.setPower(0);
+            stopAllMotors();
             Grabber.setPower(0.4);
             Thread.sleep(4000);
             Grabber.setPower(0);
@@ -122,10 +119,7 @@ public class Test extends LinearOpMode {
             FR.setPower(-0.4);
             BR.setPower(-0.4);
             Thread.sleep(900);
-            FL.setPower(0);
-            BL.setPower(0);
-            FR.setPower(0);
-            BR.setPower(0);
+            stopAllMotors();
 //            while (opModeIsActive()) {
 //                if (tfod != null) {
 //                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
@@ -229,5 +223,12 @@ public class Test extends LinearOpMode {
         FR.setPower(1.0);
         BR.setPower(1.0);
         Thread.sleep(time);
+    }
+
+    private void stopAllMotors(){
+        FL.setPower(0);
+        BL.setPower(0);
+        FR.setPower(0);
+        BR.setPower(0);
     }
 }
