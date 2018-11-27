@@ -50,9 +50,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "AutoWithTensorFlow", group = "Concept")
+@Autonomous(name = "AutoTest", group = "Concept")
 
-public class Test extends LinearOpMode {
+public class AutoCam extends LinearOpMode {
     private DcMotor FL;
     private DcMotor FR;
     private DcMotor BL;
@@ -71,6 +71,7 @@ public class Test extends LinearOpMode {
     private boolean left = false;
     private boolean right = false;
     private boolean doMove = false;
+    private boolean doLoop = true;
 
     @Override
     public void runOpMode() throws InterruptedException {
@@ -97,8 +98,51 @@ public class Test extends LinearOpMode {
 
         if (opModeIsActive()) {
             /** Activate Tensor Flow Object Detection. */
-            if (tfod != null) {
-                tfod.activate();
+            while(doLoop) {
+                if (tfod != null) {
+                    tfod.activate();
+                }
+                if (tfod != null) {
+                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                    if (updatedRecognitions != null) {
+                        telemetry.addData("# Object Detected", updatedRecognitions.size());
+                        if (updatedRecognitions.size() == 3) {
+                            int goldMineralX = -1;
+                            int silverMineral1X = -1;
+                            int silverMineral2X = -1;
+                            for (Recognition recognition : updatedRecognitions) {
+                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                    goldMineralX = (int) recognition.getLeft();
+                                } else if (silverMineral1X == -1) {
+                                    silverMineral1X = (int) recognition.getLeft();
+
+                                } else {
+                                    silverMineral2X = (int) recognition.getLeft();
+                                }
+                            }
+                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
+                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
+                                    telemetry.addData("Gold Mineral Position", "Left");
+                                    left = true;
+                                    doMove = true;
+                                    doLoop = false;
+                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
+                                    telemetry.addData("Gold Mineral Position", "Right");
+                                    right = true;
+                                    doMove = true;
+                                    doLoop = false;
+                                } else {
+                                    telemetry.addData("Gold Mineral Position", "Center");
+                                    center = true;
+                                    doMove = true;
+                                    doLoop = false;
+                                }
+                            }
+                            telemetry.addData("Gold x", goldMineralX);
+                        }
+                        telemetry.update();
+                    }
+                }
             }
             Grabber.setPower(-0.4);
             Thread.sleep(4000);
@@ -118,65 +162,39 @@ public class Test extends LinearOpMode {
             BR.setPower(-0.4);
             Thread.sleep(900);
             stopAllMotors();
-//            while (opModeIsActive()) {
-//                if (tfod != null) {
-//                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-//                    if (updatedRecognitions != null) {
-//                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-//                        if (updatedRecognitions.size() == 3) {
-//                            int goldMineralX = -1;
-//                            int silverMineral1X = -1;
-//                            int silverMineral2X = -1;
-//                            for (Recognition recognition : updatedRecognitions) {
-//                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-//                                    goldMineralX = (int) recognition.getLeft();
-//                                } else if (silverMineral1X == -1) {
-//                                    silverMineral1X = (int) recognition.getLeft();
-//
-//                                } else {
-//                                    silverMineral2X = (int) recognition.getLeft();
-//                                }
-//                            }
-//                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-//                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-//                                    telemetry.addData("Gold Mineral Position", "Left");
-//                                    left = true;
-//                                    doMove = true;
-//                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-//                                    telemetry.addData("Gold Mineral Position", "Right");
-//                                    right = true;
-//                                    doMove = true;
-//                                } else {
-//                                    telemetry.addData("Gold Mineral Position", "Center");
-//                                    center = true;
-//                                    doMove = true;
-//
-//                                }
-//                            }
-//                            telemetry.addData("Gold x", goldMineralX);
-//                        }
-//                        telemetry.update();
-//                    }
-//                }
-//                if(doMove){
-//                    if(left){
-//                       turnLeft(300);
-//                       forward(1500);
-//                    }else if(right){
-//                        turnRight(300);
-//                        forward(1500);
-//                    }else if(center){
-//                        forward(1500);
-//                    }
-//                    doMove = false;
-//                }
-//
-//            }
-        }
 
-        if (tfod != null) {
-            tfod.shutdown();
-        }
+            while (opModeIsActive()) {
+
+
+
+
+                if(doMove){
+                    if(left){
+                       turnRight(200);
+                       stopAllMotors();
+                       forward(1500);
+                       stopAllMotors();
+                    }else if(right){
+                        turnLeft(200);
+                        stopAllMotors();
+                        forward(1500);
+                        stopAllMotors();
+                    }else if(center){
+                        forward(1500);
+                        stopAllMotors();
+                    }
+                    doMove = false;
+                }
+
+            }
+                    }
+
+                    if (tfod != null) {
+                        tfod.shutdown();
+                    }
+
+
+
     }
 
     private void initVuforia() {
