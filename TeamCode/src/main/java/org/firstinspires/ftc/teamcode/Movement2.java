@@ -63,8 +63,8 @@ public class Movement2 extends LinearOpMode
                right.setPosition(0);
                left.setPosition(0);
            }else{
-               right.setPosition(1.0);
-               left.setPosition(1.0);
+               right.setPosition(0.4);
+               left.setPosition(0.4);
            }
 
         }

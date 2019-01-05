@@ -90,6 +90,9 @@ public class AutoCam extends LinearOpMode {
         } else {
             telemetry.addData("Sorry!", "This device is not compatible with TFOD");
         }
+        if (tfod != null) {
+            tfod.activate();
+        }
 
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start tracking");
@@ -160,7 +163,7 @@ public class AutoCam extends LinearOpMode {
             BL.setPower(0.4);
             FR.setPower(-0.4);
             BR.setPower(-0.4);
-            Thread.sleep(900);
+            Thread.sleep(1000);
             stopAllMotors();
 
             while (opModeIsActive()) {
@@ -170,12 +173,12 @@ public class AutoCam extends LinearOpMode {
 
                 if(doMove){
                     if(left){
-                       turnRight(200);
+                       turnRight(50, 0.6);
                        stopAllMotors();
                        forward(1500);
                        stopAllMotors();
                     }else if(right){
-                        turnLeft(200);
+                        turnLeft(120, 0.8);
                         stopAllMotors();
                         forward(1500);
                         stopAllMotors();
@@ -240,6 +243,23 @@ public class AutoCam extends LinearOpMode {
         BR.setPower(1.0);
         Thread.sleep(time);
     }
+
+    private void turnLeft(long time, double power) throws InterruptedException {
+        FL.setPower(-power);
+        BL.setPower(-power);
+        FR.setPower(power);
+        BR.setPower(power);
+        Thread.sleep(time);
+    }
+
+    private void turnRight(long time, double power) throws InterruptedException {
+        FL.setPower(power);
+        BL.setPower(power);
+        FR.setPower(-power);
+        BR.setPower(-power);
+        Thread.sleep(time);
+    }
+
 
     private void stopAllMotors(){
         FL.setPower(0);
