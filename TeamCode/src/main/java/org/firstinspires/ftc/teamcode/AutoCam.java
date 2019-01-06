@@ -50,7 +50,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "AutoTest", group = "Concept")
+@Autonomous(name = "AutoTest1", group = "Concept")
 
 public class AutoCam extends LinearOpMode {
     private DcMotor FL;

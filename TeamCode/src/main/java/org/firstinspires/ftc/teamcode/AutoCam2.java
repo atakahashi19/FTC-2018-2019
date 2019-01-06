@@ -183,6 +183,10 @@ public class AutoCam2 extends LinearOpMode {
                                 }
                             }
                             telemetry.addData("Gold x", goldMineralX);
+                        }else{
+                            left = true;
+                            doLoop = false;
+                            doMove = true;
                         }
 
                         telemetry.update();
@@ -190,7 +194,7 @@ public class AutoCam2 extends LinearOpMode {
                 }
             }
             Grabber.setPower(-0.4);
-            Thread.sleep(4000);
+            Thread.sleep(5000);
             Grabber.setPower(0);
             FL.setPower(-0.4);
             BL.setPower(-0.4);
@@ -199,13 +203,13 @@ public class AutoCam2 extends LinearOpMode {
             Thread.sleep(900);
             stopAllMotors();
             Grabber.setPower(0.4);
-            Thread.sleep(4000);
+            Thread.sleep(5000);
             Grabber.setPower(0);
-            FL.setPower(0.4);
-            BL.setPower(0.4);
-            FR.setPower(-0.4);
-            BR.setPower(-0.4);
-            Thread.sleep(900);
+//            FL.setPower(0.4);
+//            BL.setPower(0.4);
+//            FR.setPower(-0.4);
+//            BR.setPower(-0.4);
+//            Thread.sleep(900);
             stopAllMotors();
 
             while (opModeIsActive()) {
@@ -228,11 +232,10 @@ public class AutoCam2 extends LinearOpMode {
 
                     if (doMove) {
                         if (left) {
-                            turnRight(250);
                             stopAllMotors();
 
                             while (seekGold < 175) {
-                                turnRight(0.4);
+                                turnRight(0.1);
                                 if (tfod != null) {
                                     tfod.activate();
                                 }
@@ -255,9 +258,8 @@ public class AutoCam2 extends LinearOpMode {
                             forward(1500);
                             stopAllMotors();
                         } else if (right) {
-                            turnLeft(150);
                             while(seekGold>175){
-                                turnLeft(0.4);
+                                turnLeft(0.1);
                                 tfod.activate();
                             }
                             if (tfod != null) {
@@ -295,7 +297,7 @@ public class AutoCam2 extends LinearOpMode {
 
 
         }
-    }
+
 
     private void initVuforia() {
         /*
@@ -360,5 +362,18 @@ public class AutoCam2 extends LinearOpMode {
         BL.setPower(0);
         FR.setPower(0);
         BR.setPower(0);
+    }
+
+    private void paralellRight(double power) throws InterruptedException{
+        FL.setPower(-power);
+        BL.setPower(power);
+        FR.setPower(power);
+        BR.setPower(-power);
+    }
+    private void paralellLeft(double power) throws InterruptedException{
+        FL.setPower(power);
+        BL.setPower(-power);
+        FR.setPower(-power);
+        BR.setPower(power);
     }
 }
