@@ -32,6 +32,7 @@ package org.firstinspires.ftc.teamcode;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.LinearOpMode;
 import com.qualcomm.robotcore.hardware.DcMotor;
+import com.qualcomm.robotcore.hardware.Servo;
 
 import java.util.List;
 import org.firstinspires.ftc.robotcore.external.ClassFactory;
@@ -58,6 +59,10 @@ public class AutoCam2 extends LinearOpMode {
     private DcMotor BL;
     private DcMotor BR;
     private DcMotor Grabber;
+    private DcMotor Grabber2;
+    private Servo r;
+    private Servo l;
+
     private static final String TFOD_MODEL_ASSET = "RoverRuckus.tflite";
     private static final String LABEL_GOLD_MINERAL = "Gold Mineral";
     private static final String LABEL_SILVER_MINERAL = "Silver Mineral";
@@ -74,6 +79,7 @@ public class AutoCam2 extends LinearOpMode {
     private boolean doLoop = true;
     private int seekGold = -1;
 
+
     @Override
     public void runOpMode() throws InterruptedException {
         FL = hardwareMap.dcMotor.get("frontLeft");
@@ -81,9 +87,14 @@ public class AutoCam2 extends LinearOpMode {
         FR = hardwareMap.dcMotor.get("frontRight");
         BR = hardwareMap.dcMotor.get("backRight");
         Grabber = hardwareMap.dcMotor.get("Grabber");
+        Grabber2 = hardwareMap.dcMotor.get("Grabber2");
         Grabber.setDirection(DcMotor.Direction.REVERSE);
         FR.setDirection(DcMotor.Direction.REVERSE);
         BR.setDirection(DcMotor.Direction.REVERSE);
+        r = hardwareMap.servo.get("right");
+        l = hardwareMap.servo.get("left");
+        l.setDirection(Servo.Direction.REVERSE);
+
         initVuforia();
 
         if (ClassFactory.getInstance().canCreateTFObjectDetector()) {
@@ -95,116 +106,36 @@ public class AutoCam2 extends LinearOpMode {
         /** Wait for the game to begin */
         telemetry.addData(">", "Press Play to start tracking");
         telemetry.update();
+        r.setPosition(0);
+        l.setPosition(0);
         waitForStart();
 
         if (opModeIsActive()) {
             /** Activate Tensor Flow Object Detection. */
-            while (doLoop) {
-                if (tfod != null) {
-                    tfod.activate();
-                }
-                if (tfod != null) {
-                    List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-
-                    if (updatedRecognitions != null) {
-                        telemetry.addData("# Object Detected", updatedRecognitions.size());
-                        if (updatedRecognitions.size() == 2) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX == 1) {
-                                if (silverMineral1X != -1) {
-                                    if (goldMineralX > silverMineral1X) {
-                                        right = true;
-                                        doLoop = false;
-                                        doMove = true;
-                                    } else {
-                                        center = true;
-                                        doLoop = false;
-                                        doMove = true;
-                                    }
-                                } else if (silverMineral2X != -1) {
-                                    if (goldMineralX > silverMineral2X) {
-                                        right = true;
-                                        doLoop = false;
-                                        doMove = true;
-                                    } else {
-                                        center = true;
-                                        doLoop = false;
-                                        doMove = true;
-                                    }
-                                }
-                            } else {
-                                left = true;
-                                doLoop = false;
-                                doMove = true;
-                            }
-                            telemetry.addData("Gold x", goldMineralX);
-                        } else if (updatedRecognitions.size() == 3) {
-                            int goldMineralX = -1;
-                            int silverMineral1X = -1;
-                            int silverMineral2X = -1;
-                            for (Recognition recognition : updatedRecognitions) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    goldMineralX = (int) recognition.getLeft();
-                                } else if (silverMineral1X == -1) {
-                                    silverMineral1X = (int) recognition.getLeft();
-
-                                } else {
-                                    silverMineral2X = (int) recognition.getLeft();
-                                }
-                            }
-                            if (goldMineralX != -1 && silverMineral1X != -1 && silverMineral2X != -1) {
-                                if (goldMineralX < silverMineral1X && goldMineralX < silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Left");
-                                    left = true;
-                                    doMove = true;
-                                    doLoop = false;
-                                } else if (goldMineralX > silverMineral1X && goldMineralX > silverMineral2X) {
-                                    telemetry.addData("Gold Mineral Position", "Right");
-                                    right = true;
-                                    doMove = true;
-                                    doLoop = false;
-                                } else {
-                                    telemetry.addData("Gold Mineral Position", "Center");
-                                    center = true;
-                                    doMove = true;
-                                    doLoop = false;
-                                }
-                            }
-                            telemetry.addData("Gold x", goldMineralX);
-                        }else{
-                            left = true;
-                            doLoop = false;
-                            doMove = true;
-                        }
-
-                        telemetry.update();
-                    }
-                }
-            }
+            doMove = true;
+            left = true;
             Grabber.setPower(-0.4);
-            Thread.sleep(5000);
+            Grabber2.setPower(-0.4*0.8);
+            Thread.sleep(5600);
             Grabber.setPower(0);
+            Grabber2.setPower(0);
+            paralellLeft(0.3);
+            Thread.sleep(1500);
+
+            stopAllMotors();
+            Grabber.setPower(0.4);
+            Grabber2.setPower(0.4*0.8);
+            Thread.sleep(5600);
+            Grabber.setPower(0);
+            Grabber2.setPower(0);
+
+            paralellRight(0.3);
+            Thread.sleep(500);
             FL.setPower(-0.4);
             BL.setPower(-0.4);
             FR.setPower(0.4);
             BR.setPower(0.4);
-            Thread.sleep(900);
-            stopAllMotors();
-            Grabber.setPower(0.4);
-            Thread.sleep(5000);
-            Grabber.setPower(0);
+            Thread.sleep(500);
 //            FL.setPower(0.4);
 //            BL.setPower(0.4);
 //            FR.setPower(-0.4);
@@ -234,7 +165,7 @@ public class AutoCam2 extends LinearOpMode {
                         if (left) {
                             stopAllMotors();
 
-                            while (seekGold < 175) {
+                            while (seekGold < 75) {
                                 turnRight(0.1);
                                 if (tfod != null) {
                                     tfod.activate();
@@ -257,6 +188,8 @@ public class AutoCam2 extends LinearOpMode {
                             stopAllMotors();
                             forward(1500);
                             stopAllMotors();
+                            r.setPosition(0);
+                            l.setPosition(0);
                         } else if (right) {
                             while(seekGold>175){
                                 turnLeft(0.1);

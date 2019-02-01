@@ -21,6 +21,8 @@ public class Movement2 extends LinearOpMode
     private DcMotor BR;
     private DcMotor Grabber;
     private DcMotor Arm;
+    private DcMotor Grabber2;
+
     private Servo right;
     private Servo left;
 
@@ -31,6 +33,7 @@ public class Movement2 extends LinearOpMode
         FR = hardwareMap.dcMotor.get("frontRight");
         BR = hardwareMap.dcMotor.get("backRight");
         Grabber = hardwareMap.dcMotor.get("Grabber");
+        Grabber2 = hardwareMap.dcMotor.get("Grabber2");
         Arm = hardwareMap.dcMotor.get("Arm");
         right = hardwareMap.servo.get("right");
         left = hardwareMap.servo.get("left");
@@ -59,12 +62,13 @@ public class Movement2 extends LinearOpMode
            BR.setPower(RB);
            Arm.setPower(gamepad2.left_stick_y/3);
            Grabber.setPower(gamepad2.right_stick_y);
+           Grabber2.setPower(gamepad2.right_stick_y*0.8);
            if(gamepad2.x){
-               right.setPosition(0);
-               left.setPosition(0);
-           }else{
                right.setPosition(0.4);
                left.setPosition(0.4);
+           }else{
+               right.setPosition(0);
+               left.setPosition(0);
            }
 
         }
