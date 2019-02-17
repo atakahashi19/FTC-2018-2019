@@ -51,9 +51,9 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "AutoL", group = "Concept")
+@Autonomous(name = "AutoC", group = "Concept")
 
-public class AutoCam extends LinearOpMode {
+public class AutoCam3 extends LinearOpMode {
     private DcMotor FL;
     private DcMotor FR;
     private DcMotor BL;
@@ -115,7 +115,7 @@ public class AutoCam extends LinearOpMode {
             doMove = true;
             left = true;
             Grabber.setPower(-0.7);
-            Grabber2.setPower(-0.7*0.8);
+            Grabber2.setPower(-0.7 * 0.8);
             Thread.sleep(5000);
             Grabber.setPower(0);
             Grabber2.setPower(0);
@@ -124,7 +124,7 @@ public class AutoCam extends LinearOpMode {
 
             stopAllMotors();
             Grabber.setPower(0.7);
-            Grabber2.setPower(0.7*0.8);
+            Grabber2.setPower(0.7 * 0.8);
             Thread.sleep(5000);
             Grabber.setPower(0);
             Grabber2.setPower(0);
@@ -166,7 +166,7 @@ public class AutoCam extends LinearOpMode {
                         if (left) {
                             stopAllMotors();
 
-                            while (seekGold < 75) {
+                            while (seekGold < 100) {
                                 paralellLeft(0.3);
                                 if (tfod != null) {
                                     tfod.activate();
@@ -187,54 +187,19 @@ public class AutoCam extends LinearOpMode {
                                 }
                             }
                             stopAllMotors();
-                            forward(500);
-                            stopAllMotors();
-                            turnLeft(0.2);
-                            Thread.sleep(800);
-                            stopAllMotors();
-                            paralellLeft(1.0);
-                            Thread.sleep(2000);
-                            stopAllMotors();
-                            forward(0.8);
-                            Thread.sleep(3000);
-                            stopAllMotors();
-                            backP(0.3);
-                            Thread.sleep(800);
-                            stopAllMotors();
+                            forward(2000);
+stopAllMotors();
                             r.setPosition(1.0);
                             l.setPosition(1.0);
-                            stopAllMotors();
-                            backP(0.3);
+                            back(0.3);
                             Thread.sleep(1000);
                             stopAllMotors();
-                        } else if (right) {
-                            while(seekGold>175){
-                                turnLeft(0.1);
-                                tfod.activate();
-                            }
-                            if (tfod != null) {
-                                List<Recognition> recog = tfod.getUpdatedRecognitions();
-
-                                if (recog != null) {
-
-
-                                    for (Recognition recognition : recog) {
-                                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                            seekGold = (int) recognition.getLeft();
-                                        }
-                                    }
-
-                                }
-                            }
                         }
-                    } else if (center) {
-                        forward(1500);
-                        stopAllMotors();
+                        doMove = false;
                     }
-                    doMove = false;
-                }
-                telemetry.update();
+                    telemetry.update();
 
+                }
             }
         }
 
@@ -288,7 +253,7 @@ public class AutoCam extends LinearOpMode {
         BR.setPower(1.0);
         Thread.sleep(time);
     }
-    private void backP(double power) {
+    private void back(double power) {
         FL.setPower(power);
         BL.setPower(power);
         FR.setPower(power);

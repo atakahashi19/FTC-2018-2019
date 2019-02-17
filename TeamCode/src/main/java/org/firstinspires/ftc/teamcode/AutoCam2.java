@@ -51,7 +51,7 @@ import org.firstinspires.ftc.robotcore.external.tfod.Recognition;
  * IMPORTANT: In order to use this OpMode, you need to obtain your own Vuforia license key as
  * is explained below.
  */
-@Autonomous(name = "AutoTest", group = "Concept")
+@Autonomous(name = "AutoR", group = "Concept")
 
 public class AutoCam2 extends LinearOpMode {
     private DcMotor FL;
@@ -114,34 +114,35 @@ public class AutoCam2 extends LinearOpMode {
             /** Activate Tensor Flow Object Detection. */
             doMove = true;
             left = true;
-            Grabber.setPower(-0.4);
-            Grabber2.setPower(-0.4*0.8);
-            Thread.sleep(5600);
+            Grabber.setPower(-0.7);
+            Grabber2.setPower(-0.7*0.8);
+            Thread.sleep(5000);
             Grabber.setPower(0);
             Grabber2.setPower(0);
             paralellLeft(0.3);
-            Thread.sleep(1500);
+            Thread.sleep(1000);
 
             stopAllMotors();
-            Grabber.setPower(0.4);
-            Grabber2.setPower(0.4*0.8);
-            Thread.sleep(5600);
+            Grabber.setPower(0.7);
+            Grabber2.setPower(0.7*0.8);
+            Thread.sleep(5000);
             Grabber.setPower(0);
             Grabber2.setPower(0);
 
             paralellRight(0.3);
-            Thread.sleep(500);
-            FL.setPower(-0.4);
-            BL.setPower(-0.4);
-            FR.setPower(0.4);
-            BR.setPower(0.4);
-            Thread.sleep(500);
+            Thread.sleep(1000);
+
 //            FL.setPower(0.4);
 //            BL.setPower(0.4);
 //            FR.setPower(-0.4);
 //            BR.setPower(-0.4);
 //            Thread.sleep(900);
             stopAllMotors();
+            forward(0.3);
+            Thread.sleep(1000);
+            stopAllMotors();
+            paralellRight(0.3);
+            Thread.sleep(2000);
 
             while (opModeIsActive()) {
                 if (tfod != null) {
@@ -166,7 +167,7 @@ public class AutoCam2 extends LinearOpMode {
                             stopAllMotors();
 
                             while (seekGold < 75) {
-                                turnRight(0.1);
+                                paralellLeft(0.3);
                                 if (tfod != null) {
                                     tfod.activate();
                                 }
@@ -186,10 +187,26 @@ public class AutoCam2 extends LinearOpMode {
                                 }
                             }
                             stopAllMotors();
-                            forward(1500);
+                            forward(500);
                             stopAllMotors();
-                            r.setPosition(0);
-                            l.setPosition(0);
+                            turnRight(0.2);
+                            Thread.sleep(800);
+                            stopAllMotors();
+                            paralellRight(0.8);
+                            Thread.sleep(2000);
+                            stopAllMotors();
+                            forward(0.8);
+                            Thread.sleep(3000);
+                            stopAllMotors();
+                            backP(0.3);
+                            Thread.sleep(800);
+                            stopAllMotors();
+                            r.setPosition(1.0);
+                            l.setPosition(1.0);
+                            stopAllMotors();
+                            backP(0.3);
+                            Thread.sleep(1000);
+                            stopAllMotors();
                         } else if (right) {
                             while(seekGold>175){
                                 turnLeft(0.1);
@@ -210,9 +227,7 @@ public class AutoCam2 extends LinearOpMode {
                                 }
                             }
                             }
-                            stopAllMotors();
-                            forward(1500);
-                            stopAllMotors();
+
                         } else if (center) {
                             forward(1500);
                             stopAllMotors();
@@ -260,6 +275,25 @@ public class AutoCam2 extends LinearOpMode {
         FR.setPower(-1.0);
         BR.setPower(-1.0);
         Thread.sleep(time);
+    }
+    private void forward(double power) {
+        FL.setPower(-power);
+        BL.setPower(-power);
+        FR.setPower(-power);
+        BR.setPower(-power);
+    }
+    private void back(long time) throws InterruptedException {
+        FL.setPower(1.0);
+        BL.setPower(1.0);
+        FR.setPower(1.0);
+        BR.setPower(1.0);
+        Thread.sleep(time);
+    }
+    private void backP(double power) {
+        FL.setPower(power);
+        BL.setPower(power);
+        FR.setPower(power);
+        BR.setPower(power);
     }
     private void turnRight(long time) throws InterruptedException {
         FL.setPower(1.0);
