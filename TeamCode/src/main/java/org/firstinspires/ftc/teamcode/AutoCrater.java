@@ -76,11 +76,11 @@ public class AutoCrater extends LinearOpMode{
                 case LATCH:
                     Grabber.setPower(-0.8);
                     Grabber2.setPower(-0.8 * 0.8);
-                    Thread.sleep(7000);
+                    Thread.sleep(6000);
                     Grabber.setPower(0);
                     Grabber2.setPower(0);
                     paralellLeft(0.3);
-                    Thread.sleep(1000);
+                    Thread.sleep(600);//was 1000
 
                     stopAllMotors();
                     Grabber.setPower(1.0);
@@ -90,7 +90,7 @@ public class AutoCrater extends LinearOpMode{
                     Grabber2.setPower(0);
 
                     paralellRight(0.3);
-                    Thread.sleep(1000);
+                    Thread.sleep(600);//was 1000
                     stopAllMotors();
                     forward(0.3);
                     Thread.sleep(700);
