@@ -114,18 +114,18 @@ public class AutoCam2 extends LinearOpMode {
             /** Activate Tensor Flow Object Detection. */
             doMove = true;
             left = true;
-            Grabber.setPower(-0.7);
-            Grabber2.setPower(-0.7*0.8);
-            Thread.sleep(5000);
+            Grabber.setPower(-0.8);
+            Grabber2.setPower(-0.8*0.8);
+            Thread.sleep(7000);
             Grabber.setPower(0);
             Grabber2.setPower(0);
             paralellLeft(0.3);
             Thread.sleep(1000);
 
             stopAllMotors();
-            Grabber.setPower(0.7);
-            Grabber2.setPower(0.7*0.8);
-            Thread.sleep(5000);
+            Grabber.setPower(1.0);
+            Grabber2.setPower(1.0*0.8);
+            Thread.sleep(2000);
             Grabber.setPower(0);
             Grabber2.setPower(0);
 
@@ -139,7 +139,7 @@ public class AutoCam2 extends LinearOpMode {
 //            Thread.sleep(900);
             stopAllMotors();
             forward(0.3);
-            Thread.sleep(1000);
+            Thread.sleep(700);
             stopAllMotors();
             paralellRight(0.3);
             Thread.sleep(2000);
