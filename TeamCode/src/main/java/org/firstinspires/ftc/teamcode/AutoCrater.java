@@ -101,16 +101,17 @@ public class AutoCrater extends LinearOpMode{
                     break;
 
                 case DETECT:
-                    int times = 1;
-                    while(minerals.get(minerals.size()-1)!=2&&times<3) {
-                        telemetry.addData("Searching", times);
+                    while(minerals.get(minerals.size()-1)!=2&&minerals.size()<3) {
+                        telemetry.addData("Searching", minerals.size());
                         telemetry.update();
                         paralellLeft(0.3);//this needs to be changed sometimes.
                         Thread.sleep(1500);
                         stopAllMotors();
                         minerals.add(lookForward());
-                        times++;
                     }
+                    telemetry.addData("total number of minerals",minerals.size());
+                    telemetry.update();
+
                     if(minerals.size()==1){
                         right = true;
                         left = false;
@@ -334,84 +335,95 @@ public class AutoCrater extends LinearOpMode{
     public int lookForward(){
         int col = 0;
         initVuforiaThing();
-
-        if (this.tfod != null) {
-            tfod.activate();
-        }
-        if (tfod != null) {
-            List<Recognition> recog = tfod.getUpdatedRecognitions();
-            if (recog != null) {
-                for (Recognition recognition : recog) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+        boolean stopLoop = false;
+        while(!stopLoop) {
+            if (this.tfod != null) {
+                tfod.activate();
+            }
+            if (tfod != null) {
+                List<Recognition> recog = tfod.getUpdatedRecognitions();
+                if (recog != null) {
+                    for (Recognition recognition : recog) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
                             col = 2;
-                    }
-                    else{
-                        col = 1;
-                    }
-                }
+                            telemetry.addData("*", "Gold found");
+                            telemetry.update();
 
+                            stopLoop = true;
+                        } else {
+                            col = 1;
+                            telemetry.addData("*", "Silver found");
+                            telemetry.update();
+
+                            stopLoop = true;
+                        }
+                    }
+
+                }
             }
         }
           return col;
     }
 
     public void alignAndKnockOffGold() throws InterruptedException {
-        if (tfod != null) {
-            tfod.activate();
-        }
-        if (tfod != null) {
-            List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
-            if (updatedRecognitions != null) {
-                for (Recognition recognition : updatedRecognitions) {
-                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                        seekGold = (int) recognition.getLeft();
+            if (tfod != null) {
+                tfod.activate();
+            }
+            if (tfod != null) {
+                List<Recognition> updatedRecognitions = tfod.getUpdatedRecognitions();
+                if (updatedRecognitions != null) {
+                    for (Recognition recognition : updatedRecognitions) {
+                        if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                            seekGold = (int) recognition.getLeft();
+                        }
                     }
                 }
-            }
                 stopAllMotors();
-            if(seekGold<100) {
-                while (seekGold < 100) {
-                    paralellLeft(0.3);
-                    if (tfod != null) {
-                        tfod.activate();
-                    }
-                    if (tfod != null) {
-                        List<Recognition> recog = tfod.getUpdatedRecognitions();
+                if (seekGold < 100) {
+                    while (seekGold < 100) {
+                        paralellLeft(0.3);
+                        if (tfod != null) {
+                            tfod.activate();
+                        }
+                        if (tfod != null) {
+                            List<Recognition> recog = tfod.getUpdatedRecognitions();
 
-                        if (recog != null) {
+                            if (recog != null) {
 
 
-                            for (Recognition recognition : recog) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    seekGold = (int) recognition.getLeft();
+                                for (Recognition recognition : recog) {
+                                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                        seekGold = (int) recognition.getLeft();
+                                    }
                                 }
-                            }
 
+                            }
+                        }
+                    }
+                } else if (seekGold > 100) {
+                    while (seekGold > 100) {
+                        paralellRight(0.3);
+                        if (tfod != null) {
+                            tfod.activate();
+                        }
+                        if (tfod != null) {
+                            List<Recognition> recog = tfod.getUpdatedRecognitions();
+
+                            if (recog != null) {
+
+
+                                for (Recognition recognition : recog) {
+                                    if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
+                                        seekGold = (int) recognition.getLeft();
+                                    }
+                                }
+
+                            }
                         }
                     }
                 }
-            }else if(seekGold>100){
-                while (seekGold > 100) {
-                    paralellRight(0.3);
-                    if (tfod != null) {
-                        tfod.activate();
-                    }
-                    if (tfod != null) {
-                        List<Recognition> recog = tfod.getUpdatedRecognitions();
-
-                        if (recog != null) {
 
 
-                            for (Recognition recognition : recog) {
-                                if (recognition.getLabel().equals(LABEL_GOLD_MINERAL)) {
-                                    seekGold = (int) recognition.getLeft();
-                                }
-                            }
-
-                        }
-                    }
-                }
-            }
                 stopAllMotors();
                 forward(0.7);
                 Thread.sleep(1500);
@@ -419,7 +431,8 @@ public class AutoCrater extends LinearOpMode{
                 backP(0.7);
                 Thread.sleep(1500);
                 stopAllMotors();
-        }
+            }
+
     }
     enum actions {
 
